@@ -138,7 +138,54 @@ def test_get_longest_same_div_count():
     assert (get_longest_same_div_count([1,2,4]) == [1] )
     assert (get_longest_same_div_count([6,9,25,49,10,8,2]) == [9,25,49])
 
+def cifre_prime(nr):
+    '''
+    Functie care verifica daca numarul este format doar din cifre prime
+    :return: Bool, true daca numarul este format doar din cifre prime, false in caz contrar
+    '''
+    if nr == 0:
+        return False
+    while nr:
+        if nr % 10 == 1 or nr % 10 == 4 or nr % 10 == 6 or nr % 10 == 8 or nr % 10 == 9:
+            return False
+        nr = nr // 10
+    return True
 
+def  get_longest_prime_digits(lst):
+    '''
+    Functie care determina cea mai lunga subsecventa in care toate numerele sunt formate din cifre prime
+    :param lst: 
+    :return: Cea mai lunga subsecventa in care toate numerele sunt formate din cifre prime
+    '''
+    lmax = 0
+    lactual = 0
+    secv_max = []
+    secv_act = []
+    for el in lst:
+        if (cifre_prime(el)):
+            lactual = lactual + 1
+            secv_act.append(el)
+        else:
+            if (lactual > lmax):
+                lmax = lactual
+                secv_max = secv_act
+            lactual = 0
+            secv_act = []
+    if (lactual > lmax):
+        lmax = lactual
+        secv_max = secv_act
+    return secv_max
+
+
+
+def test_get_longest_prime_digits():
+    '''
+    Functie care testeaza functia get_longest_prime_digits
+    '''
+    assert(get_longest_prime_digits([2,5,6,7,8]) == [2,5])
+    assert(get_longest_prime_digits([55,35,72,4,6]) == [55,35,72])
+    assert(get_longest_prime_digits([4,6,10,13,54]) == [])
+    assert(get_longest_prime_digits([27,8,72,35,90,84,5,7,5]) == [5,7,5])
 
 def meniu():
     '''
@@ -148,7 +195,8 @@ def meniu():
     print("1.Citire date.")
     print("2.Determinare cea mai lunga subsecventa in care toate numerele sunt prime")
     print("3.Determinare cea mai lunga subsecventa in care toate numerele au acelasi numar de divizori")
-    print("4.Iesire")
+    print("4.Determinare cea mai lunga subsecventa in care toate numerele sunt formate din cifre prime")
+    print("5.Iesire")
 
 
 def main():
@@ -156,10 +204,11 @@ def main():
     test_get_longest_all_primes()
     test_nr_div()
     test_get_longest_same_div_count()
+    test_get_longest_prime_digits()
     meniu()
     optiune = 0
     lst = []
-    while optiune != 4 :
+    while optiune != 5 :
         optiune = int(input("Alegeti o optiune: "))
         if optiune == 1 :
             lst = citire()
@@ -170,6 +219,9 @@ def main():
             secv2 = get_longest_same_div_count(lst)
             print (secv2)
         elif optiune == 4 :
+            secv3 = get_longest_prime_digits(lst)
+            print (secv3)
+        elif optiune == 5 :
             break
 
 main()
